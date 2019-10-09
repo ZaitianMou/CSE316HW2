@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import ListHeading from './ListHeading'
 import ListItemsTable from './ListItemsTable'
 import ListTrash from './ListTrash'
-import PropTypes from 'prop-types';
+import AddItem from '../images/BigPlus.png'
+import PropTypes from 'prop-types'
+
 //import { threadId } from 'worker_threads';
 
 export class ListScreen extends Component {
@@ -45,6 +47,10 @@ export class ListScreen extends Component {
                     </div>
                 </div>
                 <ListItemsTable todoList={this.props.todoList}  goHome={this.props.goHome}  loadList={this.props.loadList}/>
+                <div>
+                <img src={AddItem} id="list_item_add_button"> 
+                </img>
+                </div>
             </div>
         )
     }

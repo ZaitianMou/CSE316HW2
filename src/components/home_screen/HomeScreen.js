@@ -3,6 +3,7 @@ import Banner from './Banner'
 import HomeHeader from './HomeHeader'
 import TodoListLinks from './TodoListLinks'
 import PropTypes from 'prop-types';
+import ListScreen from '../list_screen/ListScreen';
 
 export class HomeScreen extends Component {
     render() {
@@ -14,12 +15,15 @@ export class HomeScreen extends Component {
                 </div>
                 <Banner />
                 <div id="home_new_list_container">
-                    <button id="home_new_list_button">
+                    <button id="home_new_list_button" onClick={<ListScreen />}>
                         Create a New To Do List
                     </button>
                 </div>
             </div>
         )
+    }
+    createNewList =() =>{
+
     }
 }
 

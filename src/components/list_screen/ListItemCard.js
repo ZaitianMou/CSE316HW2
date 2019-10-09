@@ -35,7 +35,7 @@ export class ListItemCard extends Component {
                     <img src={MoveUp} id="ListItemMoveUp" onClick={(e) => this.listItemMoveUp(e,this.props.key,this.props.listItem)}></img>
                 </div>
                 <div>
-                    <img src={MoveDown}  id="ListItemMoveDown" onClick={this.listItemMoveDown.bind()}></img>
+                    <img src={MoveDown}  id="ListItemMoveDown" onClick={this.listItemMoveDown}></img>
                 </div>
                 <div>
                     <img src={Delete} id="ListItemDelete" onClick={this.listItemDelete}></img>
@@ -45,16 +45,25 @@ export class ListItemCard extends Component {
     }
     listItemMoveUp =(event) =>{
         event.stopPropagation();
-        //this.props.
-        console.log(this.props.key);
+        let index = this.props.todoList.items.indexOf(this.props.listItem);
+        let temp=this.props.todoList.items[index-1];
+        this.props.todoList.items[index-1]=this.props.todoList.items[index];
+        this.props.todoList.items[index]=temp;
+        this.props.goHome();
     }
-    listItemMoveDown (event){
+    listItemMoveDown =(event) => {
         event.stopPropagation();
-        console.log(this.props.key)
+        let index = this.props.todoList.items.indexOf(this.props.listItem);
+        let temp=this.props.todoList.items[index+1];
+        this.props.todoList.items[index+1]=this.props.todoList.items[index];
+        this.props.todoList.items[index]=temp;
+        this.props.goHome();
     }
     listItemDelete =(event) =>{
         event.stopPropagation();
-
+        let index = this.props.todoList.items.indexOf(this.props.listItem);
+        this.props.todoList.items.splice(index,1);
+        this.props.goHome();
     }
 }
 

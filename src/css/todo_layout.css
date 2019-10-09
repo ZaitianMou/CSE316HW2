@@ -78,6 +78,16 @@ body {
   border-radius: 5px;
   cursor: pointer;
 }
+
+#list_item_add_button{
+  position: absolute;
+  left:45%;
+  width:5%;
+  cursor: pointer;
+  background-color: #E6E6E6;
+}
+
+
 .list_item_card_description {
   position: absolute;
   left: 2%;
