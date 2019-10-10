@@ -26,7 +26,8 @@ export class ListScreen extends Component {
         return (
             <div id="todo_list">
                 <ListHeading goHome={this.props.goHome} />
-                <ListTrash goHome={this.props.goHome} todoList={this.props.todoList} todoLists={this.props.todoLists} />
+                <ListTrash goHome={this.props.goHome} todoList={this.props.todoList} todoLists={this.props.todoLists}
+                    loadDeleteListDialog={this.props.loadDeleteListDialog} />
                 <div id="list_details_container">
                     <div id="list_details_name_container" className="text_toolbar">
                         <span id="list_name_prompt">Name:</span>
@@ -41,25 +42,26 @@ export class ListScreen extends Component {
                         <input
                             defaultValue={this.getListOwner()}
                             type="text"
-                            id="list_owner_textfield" 
+                            id="list_owner_textfield"
                             onChange={this.changeListOwner}
-                            />
+                        />
                     </div>
                 </div>
-                <ListItemsTable todoList={this.props.todoList}  goHome={this.props.goHome}  loadList={this.props.loadList}/>
+                <ListItemsTable todoList={this.props.todoList} goHome={this.props.goHome} 
+                loadList={this.props.loadList} loadItemScreen={this.props.loadItemScreen} />
                 <div>
-                <img src={AddItem} id="list_item_add_button"> 
-                </img>
+                    <img src={AddItem} id="list_item_add_button" onClick={this.props.loadItemScreen}>
+                    </img>
                 </div>
             </div>
         )
     }
 
-    changeListName =(event) => {
-       this.props.todoList.name=event.target.value
+    changeListName = (event) => {
+        this.props.todoList.name = event.target.value
     }
     changeListOwner = (event) => {
-        this.props.todoList.owner=event.target.value
+        this.props.todoList.owner = event.target.value
     }
 }
 

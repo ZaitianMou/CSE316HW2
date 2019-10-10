@@ -3,11 +3,13 @@ import testTodoListData from './TestTodoListData.json'
 import HomeScreen from './components/home_screen/HomeScreen'
 import ItemScreen from './components/item_screen/ItemScreen'
 import ListScreen from './components/list_screen/ListScreen'
+import ListDeleteModal from './components/list_screen/ListDeleteModal'
 
 const AppScreen = {
   HOME_SCREEN: "HOME_SCREEN",
   LIST_SCREEN: "LIST_SCREEN",
-  ITEM_SCREEN: "ITEM_SCREEN"
+  ITEM_SCREEN: "ITEM_SCREEN",
+  LIST_DELETE_MODAL: "LIST_DELETE_MODAL"
 }
 
 class App extends Component {
@@ -25,24 +27,45 @@ class App extends Component {
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
-    console.log("currentList: " + this.state.currentList);
-    console.log("currentScreen: " + this.state.currentScreen);
+    //console.log("currentList: " + this.state.currentList);
+    //console.log("currentScreen: " + this.state.currentScreen);
+  }
+  loadDeleteListDialog = () =>{
+    this.setState({currentScreen:AppScreen.LIST_DELETE_MODAL})
   }
 
+  loadItemScreen =()=>{
+    this.setState({currentScreen:AppScreen.ITEM_SCREEN});
+  }
   render() {
     switch(this.state.currentScreen) {
       case AppScreen.HOME_SCREEN:
         return <HomeScreen 
         loadList={this.loadList.bind(this)} 
+        goHome={this.goHome.bind(this)}
         todoLists={this.state.todoLists} />;
       case AppScreen.LIST_SCREEN:            
         return <ListScreen
           loadList={this.loadList.bind(this)}
           goHome={this.goHome.bind(this)}
           todoList={this.state.currentList} 
-          todoLists={this.state.todoLists}/>;
+          todoLists={this.state.todoLists}
+          loadItemScreen={this.loadItemScreen.bind(this)}
+          loadDeleteListDialog={this.loadDeleteListDialog.bind(this)}
+          />;
+          
       case AppScreen.ITEM_SCREEN:
-        return <ItemScreen loadList={this.loadList.bind(this)}  />;
+        //alert("!!");
+        return <ItemScreen 
+        loadList={this.loadList.bind(this)} 
+        todoList={this.state.currentList} 
+        loadItemScreen={this.loadItemScreen.bind(this)} />;
+
+      case AppScreen.LIST_DELETE_MODAL:
+        return <ListDeleteModal 
+            goHome ={this.goHome.bind(this)}
+            loadList={this.loadList.bind(this)}/>;
+
       default:
         return <div>ERROR</div>;
     }

@@ -15,7 +15,7 @@ export class HomeScreen extends Component {
                 </div>
                 <Banner />
                 <div id="home_new_list_container">
-                    <button id="home_new_list_button" onClick={<ListScreen />}>
+                    <button id="home_new_list_button" onClick={this.createNewList.bind(this)}>
                         Create a New To Do List
                     </button>
                 </div>
@@ -23,7 +23,17 @@ export class HomeScreen extends Component {
         )
     }
     createNewList =() =>{
-
+        //alert("!!!");
+        let index = this.props.todoLists.length;
+        this.props.todoLists.push({
+            "key": index,
+            "name": "UNKNOWN",
+            "owner": "",
+            "items": []
+        })
+        //this.props.goHome();
+        this.props.loadList(this.props.todoLists[index]);
+        console.log(this.props.todoLists[index])
     }
 }
 

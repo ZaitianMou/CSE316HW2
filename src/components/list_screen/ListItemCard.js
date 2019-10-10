@@ -18,7 +18,7 @@ export class ListItemCard extends Component {
         //     styleColor="color: rgb(214, 10, 10);";
         // }
         return (
-            <div className='list_item_card'>
+            <div className='list_item_card' onClick={this.props.loadItemScreen}>
                 <div className='list_item_card_description'>
                     {this.props.listItem.description}
                 </div>
@@ -32,13 +32,13 @@ export class ListItemCard extends Component {
                     {this.whetherCompleted(this.props.listItem.completed)}
                 </div>
                 <div>
-                    <img src={MoveUp} id="ListItemMoveUp" onClick={(e) => this.listItemMoveUp(e,this.props.key,this.props.listItem)}></img>
+                    <img src={MoveUp} id="ListItemMoveUp" onClick={(e) => this.listItemMoveUp(e)}></img>
                 </div>
                 <div>
-                    <img src={MoveDown}  id="ListItemMoveDown" onClick={this.listItemMoveDown}></img>
+                    <img src={MoveDown}  id="ListItemMoveDown" onClick={this.listItemMoveDown.bind(this)}></img>
                 </div>
                 <div>
-                    <img src={Delete} id="ListItemDelete" onClick={this.listItemDelete}></img>
+                    <img src={Delete} id="ListItemDelete" onClick={this.listItemDelete.bind(this)}></img>
                 </div>
             </div>
         )
@@ -49,7 +49,7 @@ export class ListItemCard extends Component {
         let temp=this.props.todoList.items[index-1];
         this.props.todoList.items[index-1]=this.props.todoList.items[index];
         this.props.todoList.items[index]=temp;
-        this.props.goHome();
+        this.props.loadList(this.props.todoList)
     }
     listItemMoveDown =(event) => {
         event.stopPropagation();
@@ -57,13 +57,14 @@ export class ListItemCard extends Component {
         let temp=this.props.todoList.items[index+1];
         this.props.todoList.items[index+1]=this.props.todoList.items[index];
         this.props.todoList.items[index]=temp;
-        this.props.goHome();
+        this.props.loadList(this.props.todoList);
     }
     listItemDelete =(event) =>{
         event.stopPropagation();
         let index = this.props.todoList.items.indexOf(this.props.listItem);
         this.props.todoList.items.splice(index,1);
-        this.props.goHome();
+        this.props.loadList(this.props.todoList);
+      
     }
 }
 
