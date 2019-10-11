@@ -12,13 +12,15 @@ export class ListItemCard extends Component {
             return "Pending";
         }
     }
+    
     render() {
         // let styleColor="font-color-red";
         // if (!this.props.listItem.completed){
         //     styleColor="color: rgb(214, 10, 10);";
         // }
+        
         return (
-            <div className='list_item_card' onClick={this.props.loadItemScreen}>
+            <div className='list_item_card' onClick={()=>this.props.loadItemScreen(this.props.listItem)}>
                 <div className='list_item_card_description'>
                     {this.props.listItem.description}
                 </div>
@@ -31,17 +33,31 @@ export class ListItemCard extends Component {
                 <div className='list_item_card_completed'>
                     {this.whetherCompleted(this.props.listItem.completed)}
                 </div>
+                {/* <script>
+            var x="ListItemMoveUp"+this.props.todoList.items.indexOf(this.props.listItem);
+    </script> */}
                 <div>
-                    <img src={MoveUp} id="ListItemMoveUp" onClick={(e) => this.listItemMoveUp(e)}></img>
+                    <img src={MoveUp}  className="ListItemMoveUp" onClick={(e) => this.listItemMoveUp(e)}></img>
+                    {/* {this.disableButton()}
+                    {document.getElementById} */}
                 </div>
                 <div>
-                    <img src={MoveDown}  id="ListItemMoveDown" onClick={this.listItemMoveDown.bind(this)}></img>
+                    <img src={MoveDown}  className="ListItemMoveDown" onClick={this.listItemMoveDown.bind(this)}></img>
                 </div>
                 <div>
-                    <img src={Delete} id="ListItemDelete" onClick={this.listItemDelete.bind(this)}></img>
+                    <img src={Delete} className="ListItemDelete" onClick={this.listItemDelete.bind(this)}></img>
                 </div>
             </div>
         )
+    }
+    disableButton =()=>{
+        console.log(this.props.listItem.key);
+        
+        if (this.props.todoList.items.indexOf(this.props.listItem)==0){
+            //alert(this.props.listItem.key);
+            console.log(document.getElementById("ListItemMoveUp"));
+            //document.getElementById("ListItemMoveUp").style.pointerEvents="none";
+        }
     }
     listItemMoveUp =(event) =>{
         event.stopPropagation();

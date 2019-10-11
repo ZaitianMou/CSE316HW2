@@ -16,7 +16,8 @@ class App extends Component {
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
     todoLists: testTodoListData.todoLists,
-    currentList: null
+    currentList: null,
+    listItemForItemScreen:null
   }
 
   goHome = () => {
@@ -34,8 +35,9 @@ class App extends Component {
     this.setState({currentScreen:AppScreen.LIST_DELETE_MODAL})
   }
 
-  loadItemScreen =()=>{
+  loadItemScreen =(listItem)=>{
     this.setState({currentScreen:AppScreen.ITEM_SCREEN});
+    this.setState({listItemForItemScreen:listItem})
   }
   render() {
     switch(this.state.currentScreen) {
@@ -53,13 +55,13 @@ class App extends Component {
           loadItemScreen={this.loadItemScreen.bind(this)}
           loadDeleteListDialog={this.loadDeleteListDialog.bind(this)}
           />;
-          
       case AppScreen.ITEM_SCREEN:
         //alert("!!");
         return <ItemScreen 
         loadList={this.loadList.bind(this)} 
         todoList={this.state.currentList} 
-        loadItemScreen={this.loadItemScreen.bind(this)} />;
+        loadItemScreen={this.loadItemScreen.bind(this)}
+        listItem={this.state.listItemForItemScreen} />;
 
       case AppScreen.LIST_DELETE_MODAL:
         return <ListDeleteModal 
