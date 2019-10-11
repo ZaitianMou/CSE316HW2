@@ -12,13 +12,18 @@ export class ListItemCard extends Component {
             return "Pending";
         }
     }
-    
+   
     render() {
         // let styleColor="font-color-red";
         // if (!this.props.listItem.completed){
         //     styleColor="color: rgb(214, 10, 10);";
         // }
-        
+        if(this.props.listItem.completed)
+        var classForWhetherCompleted="ItemCompleted";
+    
+        else 
+        var classForWhetherCompleted="ItemNotCompleted";
+    
         return (
             <div className='list_item_card' onClick={()=>this.props.loadItemScreen(this.props.listItem)}>
                 <div className='list_item_card_description'>
@@ -30,7 +35,7 @@ export class ListItemCard extends Component {
                 <div className='list_item_card_due_date'>
                     {this.props.listItem.due_date}
                 </div>
-                <div className='list_item_card_completed'>
+                <div className='list_item_card_completed'  className={classForWhetherCompleted}>
                     {this.whetherCompleted(this.props.listItem.completed)}
                 </div>
                 {/* <script>

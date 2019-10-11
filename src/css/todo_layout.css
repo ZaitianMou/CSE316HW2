@@ -151,6 +151,19 @@ body {
   border-radius: 10px;
 }
 
+.ItemCompleted{
+  color: black;
+  position: absolute;
+  left: 60%;
+  top:50%
+}
+.ItemNotCompleted{
+  color: crimson;
+  position: absolute;
+  left: 60%;
+  top:50%
+}
+
 button:enabled{
   background-colar: #1a811f;
 }
