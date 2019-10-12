@@ -20,7 +20,7 @@ export class ItemScreen extends Component {
         return (
             <div id="item_edit_screen" >
                 Item<br></br>
-               
+        
                 <p id="item_description_prompt">Description:</p>  <input type="text" name="Description" id="newDescription" defaultValue={des}/>
                 <p id="item_assigned_to_prompt">Assigned To: </p> <input type="text" name="AssignedTo" id="newAssignedTo" defaultValue={ass} /> 
                 <p id="item_due_date_prompt">Due Date:</p>  <input type="date" name="DueDate" id="newDueDate" defaultValue={due}/> 

@@ -53,6 +53,17 @@ export class ListScreen extends Component {
                     <img src={AddItem} id="list_item_add_button" onClick={this.props.loadItemScreen}>
                     </img>
                 </div>
+                {/* this it the modal when delete the list*/}
+  
+                <div id="modal_yes_no_dialog" hidden>
+                    <div id="modal_content" >
+                    <p>Delete list?</p> 
+                    <b>Are you sure you want to delete this list? </b><br></br>
+                    <button id="modal_yes_button" className="modal_button" onClick={this.processConfirmDeleteList}>YES</button>
+                    <button id="modal_no_button" className="modal_button" onClick={this.processCancelDeleteList}>NO</button>
+                    <p>The list will not be retreivable.</p>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -62,6 +73,36 @@ export class ListScreen extends Component {
     }
     changeListOwner = (event) => {
         this.props.todoList.owner = event.target.value
+    }
+    processConfirmDeleteList =()=>{
+        //first delete the list
+        let index = this.props.todoLists.indexOf(this.props.todoList);
+        this.props.todoLists.splice(index, 1);
+        //and then close the dialog
+        let dialog = document.getElementById("modal_content");
+        dialog.classList.add("animateOut");
+
+        setTimeout(function(){
+            dialog.classList.remove("animateOut");
+            dialog.hidden=true;
+            dialog = document.getElementById("modal_yes_no_dialog");
+            dialog.hidden=true;
+        },2000);
+
+        //finally go to the home page
+        setTimeout(()=>{
+            this.props.goHome();
+        },2000)
+    }
+    processCancelDeleteList =()=>{
+        let dialog = document.getElementById("modal_content");
+        dialog.classList.add("animateOut");
+        setTimeout(function(){
+            dialog.classList.remove("animateOut");
+            dialog.hidden=true;
+            dialog = document.getElementById("modal_yes_no_dialog");
+            dialog.hidden=true;
+        },2000);
     }
 }
 
