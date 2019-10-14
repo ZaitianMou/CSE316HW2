@@ -123,6 +123,7 @@ body {
   text-align: center;
   border-radius: 5px;
   margin: 1%;
+  
 }
 .list_item_add_card {
   text-align: center;
@@ -132,7 +133,6 @@ body {
   position: absolute;
   left:79%;
   width:5.05%;
-  background-color: #696;
   border-radius: 10px;
 }
 
@@ -163,15 +163,6 @@ body {
   left: 60%;
   top:50%
 }
-
-button:enabled{
-  background-colar: #1a811f;
-}
-button:disabled{
-  background-color: #dddcdc;
-}
-
-
 
 #modal_yes_no_dialog {
   /* display: none;  Hidden by default */

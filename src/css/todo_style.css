@@ -146,6 +146,10 @@ body {
 }
 .disabled {
   background-color: lightgray;
+  /* pointer-events: none; */
+  /* disabled:true; */
+  /* pointer-events: none; */
+
 }
 .disabled:hover {
   color: var(--swatch-neutral);
