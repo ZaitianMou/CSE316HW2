@@ -14,10 +14,6 @@ export class ListItemCard extends Component {
     }
 
     render() {
-        // let styleColor="font-color-red";
-        // if (!this.props.listItem.completed){
-        //     styleColor="color: rgb(214, 10, 10);";
-        // }
         if (this.props.listItem.completed)
             var classForWhetherCompleted = "ItemCompleted";
 
@@ -71,7 +67,7 @@ export class ListItemCard extends Component {
         if (index >= 1) {
             let temp = this.props.todoList.items[index - 1];
             this.props.todoList.items[index - 1] = this.props.todoList.items[index];
-            this.props.todoList.items[index] = 2
+            this.props.todoList.items[index] = temp;
             this.props.loadList(this.props.todoList)
         }
         event.stopPropagation();
