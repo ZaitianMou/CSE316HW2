@@ -4,6 +4,7 @@ import HomeScreen from './components/home_screen/HomeScreen'
 import ItemScreen from './components/item_screen/ItemScreen'
 import ListScreen from './components/list_screen/ListScreen'
 import ListDeleteModal from './components/list_screen/ListDeleteModal'
+import jTPS from './jTPS'
 
 const AppScreen = {
   HOME_SCREEN: "HOME_SCREEN",
@@ -17,7 +18,8 @@ class App extends Component {
     currentScreen: AppScreen.HOME_SCREEN,
     todoLists: testTodoListData.todoLists,
     currentList: null,
-    listItemForItemScreen:null
+    listItemForItemScreen:null,
+    TPS:new jTPS()
   }
 
   goHome = () => {
@@ -54,6 +56,7 @@ class App extends Component {
           todoLists={this.state.todoLists}
           loadItemScreen={this.loadItemScreen.bind(this)}
           loadDeleteListDialog={this.loadDeleteListDialog.bind(this)}
+          TPS={this.state.TPS}
           />;
       case AppScreen.ITEM_SCREEN:
         //alert("!!");

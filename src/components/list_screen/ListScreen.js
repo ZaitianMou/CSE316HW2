@@ -4,6 +4,9 @@ import ListItemsTable from './ListItemsTable'
 import ListTrash from './ListTrash'
 import AddItem from '../images/BigPlus.png'
 import PropTypes from 'prop-types'
+import jTPS from '../../jTPS'
+import jTPS_Transaction from '../../jTPS_Transaction'
+import transaction_ListItemChange from '../../transaction_ListItemChange'
 
 //import { threadId } from 'worker_threads';
 
@@ -22,9 +25,22 @@ export class ListScreen extends Component {
             return this.props.todoList.owner;
         }
     }
+    keyboardInput(e){
+        if (e.key==='z' && e.ctrlKey){
+            this.props.TPS.undoTransaction();
+            console.log("ctrlZ")
+            this.props.goHome();
+        }
+        //redo
+        else if (e.key==='y'&& e.ctrlKey){
+           this.props.TPS.doTransaction();
+           console.log("ctrlY"+this.props.todoList)
+           this.props.goHome();
+        }
+    }
     render() {
         return (
-            <div id="todo_list">
+            <div id="todo_list" onKeyDown={e =>this.keyboardInput(e)} tabIndex="0" >
                 <ListHeading goHome={this.props.goHome} />
                 <ListTrash goHome={this.props.goHome} todoList={this.props.todoList} todoLists={this.props.todoLists}
                     loadDeleteListDialog={this.props.loadDeleteListDialog} />
@@ -47,62 +63,68 @@ export class ListScreen extends Component {
                         />
                     </div>
                 </div>
-                <ListItemsTable todoList={this.props.todoList} goHome={this.props.goHome} 
-                loadList={this.props.loadList} loadItemScreen={this.props.loadItemScreen} />
+                <ListItemsTable todoList={this.props.todoList} goHome={this.props.goHome}
+                    loadList={this.props.loadList} loadItemScreen={this.props.loadItemScreen} />
                 <div>
                     <img src={AddItem} id="list_item_add_button" onClick={this.props.loadItemScreen}>
                     </img>
                 </div>
                 {/* this it the modal when delete the list*/}
-  
+
                 <div id="modal_yes_no_dialog" hidden>
                     <div id="modal_content" >
-                    <p>Delete list?</p> 
-                    <b>Are you sure you want to delete this list? </b><br></br>
-                    <button id="modal_yes_button" className="modal_button" onClick={this.processConfirmDeleteList}>YES</button>
-                    <button id="modal_no_button" className="modal_button" onClick={this.processCancelDeleteList}>NO</button>
-                    <p>The list will not be retreivable.</p>
+                        <p>Delete list?</p>
+                        <b>Are you sure you want to delete this list? </b><br></br>
+                        <button id="modal_yes_button" className="modal_button" onClick={this.processConfirmDeleteList}>YES</button>
+                        <button id="modal_no_button" className="modal_button" onClick={this.processCancelDeleteList}>NO</button>
+                        <p>The list will not be retreivable.</p>
                     </div>
                 </div>
             </div>
         )
     }
 
+    callBackForListNameChange(n){
+        this.props.todoList.name=n;
+    }
+
     changeListName = (event) => {
-        this.props.todoList.name = event.target.value
+        var transaction=new transaction_ListItemChange(this.getListName(),event.target.value,this.callBackForListNameChange.bind(this));
+        this.props.todoList.name = event.target.value;
+        this.props.TPS.addTransaction(transaction); 
     }
     changeListOwner = (event) => {
         this.props.todoList.owner = event.target.value
     }
-    processConfirmDeleteList =()=>{
-        //first delete the list
+    processConfirmDeleteList = () => {
+        //first delete the list 
         let index = this.props.todoLists.indexOf(this.props.todoList);
         this.props.todoLists.splice(index, 1);
         //and then close the dialog
         let dialog = document.getElementById("modal_content");
         dialog.classList.add("animateOut");
 
-        setTimeout(function(){
+        setTimeout(function () {
             dialog.classList.remove("animateOut");
-            dialog.hidden=true;
+            dialog.hidden = true;
             dialog = document.getElementById("modal_yes_no_dialog");
-            dialog.hidden=true;
-        },2000);
+            dialog.hidden = true;
+        }, 2000);
 
         //finally go to the home page
-        setTimeout(()=>{
+        setTimeout(() => {
             this.props.goHome();
-        },2000)
+        }, 2000)
     }
-    processCancelDeleteList =()=>{
+    processCancelDeleteList = () => {
         let dialog = document.getElementById("modal_content");
         dialog.classList.add("animateOut");
-        setTimeout(function(){
+        setTimeout(function () {
             dialog.classList.remove("animateOut");
-            dialog.hidden=true;
+            dialog.hidden = true;
             dialog = document.getElementById("modal_yes_no_dialog");
-            dialog.hidden=true;
-        },2000);
+            dialog.hidden = true;
+        }, 2000);
     }
 }
 
