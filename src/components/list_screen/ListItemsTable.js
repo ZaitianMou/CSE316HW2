@@ -19,7 +19,8 @@ export class ListItemsTable extends Component {
                             todoList={this.props.todoList} 
                             goHome={this.props.goHome}
                             loadItemScreen={this.props.loadItemScreen}
-                            loadList={this.props.loadList}/>
+                            loadList={this.props.loadList}
+                            TPS={this.props.TPS}/>
                     ))
                 }
 

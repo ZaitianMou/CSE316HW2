@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import MoveDown from '../images/MoveDown.png'
 import MoveUp from '../images/MoveUp.png'
 import Delete from '../images/Delete.png'
+import transaction_ItemOrderChange from '../../transaction_ItemOrderChange'
+import transaction_ItemRemoval from '../../transaction_ItemRemoval'
 
 export class ListItemCard extends Component {
 
@@ -62,12 +64,21 @@ export class ListItemCard extends Component {
             //document.getElementById("ListItemMoveUp").style.pointerEvents="none";
         }
     }
+
+    callBackForItemOrderChange=(x,y)=>{
+        let temp=this.props.todoList.items[x];
+        this.props.todoList.items[x]=this.props.todoList.items[y];
+        this.props.todoList.items[y]=temp;
+    }
     listItemMoveUp = (event) => {
         let index = this.props.todoList.items.indexOf(this.props.listItem);
         if (index >= 1) {
-            let temp = this.props.todoList.items[index - 1];
-            this.props.todoList.items[index - 1] = this.props.todoList.items[index];
-            this.props.todoList.items[index] = temp;
+            // let temp = this.props.todoList.items[index - 1];
+            // this.props.todoList.items[index - 1] = this.props.todoList.items[index];
+            // this.props.todoList.items[index] = temp;
+            
+            var transaction=new transaction_ItemOrderChange(index,index-1,this.callBackForItemOrderChange)
+            this.props.TPS.addTransaction(transaction);
             this.props.loadList(this.props.todoList)
         }
         event.stopPropagation();
@@ -76,16 +87,33 @@ export class ListItemCard extends Component {
         event.stopPropagation();
         let index = this.props.todoList.items.indexOf(this.props.listItem);
         if (index < this.props.todoList.items.length - 1) {
-            let temp = this.props.todoList.items[index + 1];
-            this.props.todoList.items[index + 1] = this.props.todoList.items[index];
-            this.props.todoList.items[index] = temp;
+            // let temp = this.props.todoList.items[index + 1];
+            // this.props.todoList.items[index + 1] = this.props.todoList.items[index];
+            // this.props.todoList.items[index] = temp;
+
+            var transaction=new transaction_ItemOrderChange(index,index+1,this.callBackForItemOrderChange.bind(this))
+            this.props.TPS.addTransaction(transaction);
             this.props.loadList(this.props.todoList);
         }
     }
+
+    callBackForItemRemoval(i){
+        var index=this.props.todoList.items.indexOf(i)
+        // console.log(index)
+        if (index>=0){
+            this.props.todoList.items.splice(index,1)
+        }
+        else{
+            this.props.todoList.items.push(i)
+        }
+    }
+
     listItemDelete = (event) => {
         event.stopPropagation();
         let index = this.props.todoList.items.indexOf(this.props.listItem);
-        this.props.todoList.items.splice(index, 1);
+        var transaction=new transaction_ItemRemoval(this.props.todoList.items[index],this.callBackForItemRemoval.bind(this));
+
+        this.props.TPS.addTransaction(transaction)
         this.props.loadList(this.props.todoList);
 
     }

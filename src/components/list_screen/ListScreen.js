@@ -6,7 +6,9 @@ import AddItem from '../images/BigPlus.png'
 import PropTypes from 'prop-types'
 import jTPS from '../../jTPS'
 import jTPS_Transaction from '../../jTPS_Transaction'
-import transaction_ListItemChange from '../../transaction_ListItemChange'
+import transaction_ListNameChange from '../../transaction_ListNameChange'
+import transaction_ListOwnerChange from '../../transaction_ListOwnerChange'
+
 
 //import { threadId } from 'worker_threads';
 
@@ -27,15 +29,21 @@ export class ListScreen extends Component {
     }
     keyboardInput(e){
         if (e.key==='z' && e.ctrlKey){
-            this.props.TPS.undoTransaction();
-            console.log("ctrlZ")
-            this.props.goHome();
+            if (this.props.TPS.hasTransactionToUndo()){
+                this.props.TPS.undoTransaction();
+                this.props.goHome();
+                alert("Undo")
+                this.props.loadList(this.props.todoList)
+            }
         }
         //redo
         else if (e.key==='y'&& e.ctrlKey){
-           this.props.TPS.doTransaction();
-           console.log("ctrlY"+this.props.todoList)
-           this.props.goHome();
+            if (this.props.TPS.hasTransactionToRedo()){
+                this.props.TPS.doTransaction();
+                this.props.goHome();
+                alert("Redo")
+                this.props.loadList(this.props.todoList)
+            }
         }
     }
     render() {
@@ -63,7 +71,7 @@ export class ListScreen extends Component {
                         />
                     </div>
                 </div>
-                <ListItemsTable todoList={this.props.todoList} goHome={this.props.goHome}
+                <ListItemsTable todoList={this.props.todoList} goHome={this.props.goHome} TPS={this.props.TPS}
                     loadList={this.props.loadList} loadItemScreen={this.props.loadItemScreen} />
                 <div>
                     <img src={AddItem} id="list_item_add_button" onClick={this.props.loadItemScreen}>
@@ -87,14 +95,20 @@ export class ListScreen extends Component {
     callBackForListNameChange(n){
         this.props.todoList.name=n;
     }
+    callBackForListOwnerChange(o){
+        this.props.todoList.owner=o;
+    }
+
 
     changeListName = (event) => {
-        var transaction=new transaction_ListItemChange(this.getListName(),event.target.value,this.callBackForListNameChange.bind(this));
+        var transaction=new transaction_ListNameChange(this.getListName(),event.target.value,this.callBackForListNameChange.bind(this));
         this.props.todoList.name = event.target.value;
         this.props.TPS.addTransaction(transaction); 
     }
     changeListOwner = (event) => {
+        var transaction=new transaction_ListOwnerChange(this.getListOwner(),event.target.value,this.callBackForListOwnerChange.bind(this));
         this.props.todoList.owner = event.target.value
+        this.props.TPS.addTransaction(transaction)
     }
     processConfirmDeleteList = () => {
         //first delete the list 

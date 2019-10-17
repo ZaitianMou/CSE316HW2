@@ -1,6 +1,6 @@
 import jTPS_Transaction from './jTPS_Transaction'
 
-export class transaction_ListItemChange extends jTPS_Transaction {
+export class transaction_ListOwnerChange extends jTPS_Transaction {
     constructor(x, y, f) {
         super();
         this.oldValue = x;
@@ -11,7 +11,6 @@ export class transaction_ListItemChange extends jTPS_Transaction {
      * This method is called by jTPS when a transaction is executed.
      */
     doTransaction() {
-        
         this.f(this.newValue)
     }
 
@@ -19,9 +18,8 @@ export class transaction_ListItemChange extends jTPS_Transaction {
      * This method is called by jTPS when a transaction is undone.
      */
     undoTransaction() {
-       
         this.f(this.oldValue)
     }
 }
 
-export default transaction_ListItemChange
+export default transaction_ListOwnerChange
