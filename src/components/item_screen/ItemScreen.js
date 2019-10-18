@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { throwStatement } from '@babel/types';
+import { throwStatement, bigIntLiteral } from '@babel/types';
 import transaction_ItemEdit from '../../transaction_ItemEdit';
 
 export class ItemScreen extends Component {
@@ -34,6 +34,70 @@ export class ItemScreen extends Component {
     }
 
 
+    callBackForItemEdit(oldDes,oldAss,oldDue,oldCom,des,ass,due,com,whetherCreate){
+
+        
+        // when create new item
+        if (whetherCreate){
+           
+            
+            var whetherInList=false;
+            var index=0;
+           
+            for (index=0;index<this.props.todoList.items.length;index++){
+                
+                if (this.props.todoList.items[index].description==des && this.props.todoList.items[index].assigned_to==ass
+                    && this.props.todoList.items[index].due_date==due && this.props.todoList.items[index].completed==com) {
+                    whetherInList=true;
+                    break;
+                }
+            }
+            if(whetherInList){
+                //undo
+                this.props.todoList.items.splice(index,1)
+                
+                this.props.loadList(this.props.todoList);
+            }
+            //redo
+            else{
+                var length = this.props.todoList.items.length;
+                this.props.todoList.items[length] = {
+                    "key": length,
+                    "description": des,
+                    "due_date": due,
+                    "assigned_to": ass,
+                    "completed": com
+                }
+                this.props.loadList(this.props.todoList);
+            }
+        }
+
+        
+        else{
+            //when edit item
+            //console.log(oldDes+"||"+oldAss+"||"+oldDue+"||"+oldCom+"||"+des+"||"+ass+"||"+due+"||"+com);
+            if (this.props.listItem.description==des &&this.props.listItem.assigned_to==ass &&
+                this.props.listItem.due_date==due && this.props.listItem.completed==com){
+                //for undo
+                   
+                    this.props.listItem.description = oldDes;
+                    this.props.listItem.assigned_to = oldAss;
+                    this.props.listItem.due_date = oldDue;
+                    this.props.listItem.completed = oldCom;
+                    this.props.loadList(this.props.todoList);
+                }
+                //for do
+                else{
+                    this.props.listItem.description = des;
+                    this.props.listItem.assigned_to = ass;
+                    this.props.listItem.due_date = due;
+                    this.props.listItem.completed = com;
+                    this.props.loadList(this.props.todoList);
+                    
+                }
+        }
+    }
+    
     handleSubmit = () => {
         var x = this.props.todoList.items.indexOf(this.props.listItem);
         var newDescription = document.getElementById("newDescription").value;
@@ -42,24 +106,29 @@ export class ItemScreen extends Component {
         var newCompleted = document.getElementById("newCompleted").checked;
         //when it's creating a new item.
         if (x < 0) {
-            var length = this.props.todoList.items.length;
-            this.props.todoList.items[length] = {
-                "key": length,
-                "description": newDescription,
-                "due_date": newDueDate,
-                "assigned_to": newAssignedTo,
-                "completed": newCompleted
-            }
-            this.props.loadList(this.props.todoList);
+            // var length = this.props.todoList.items.length;
+            // this.props.todoList.items[length] = {
+            //     "key": length,
+            //     "description": newDescription,
+            //     "due_date": newDueDate,
+            //     "assigned_to": newAssignedTo,
+            //     "completed": newCompleted
+            // }
+            var transaction=new transaction_ItemEdit("","","","",newDescription,newAssignedTo,newDueDate,newCompleted,true,this.callBackForItemEdit.bind(this));
+            this.props.TPS.addTransaction(transaction);
+            //this.props.loadList(this.props.todoList);
         }
         //when it's editting a item
         else {
-            this.props.listItem.description = newDescription;
-            this.props.listItem.assigned_to = newAssignedTo;
-            this.props.listItem.due_date = newDueDate;
-            this.props.listItem.completed = newCompleted;
-            this.props.loadList(this.props.todoList);
-            //var transaction=new transaction_ItemEdit(this.callBackForItemEdit.bind(this));
+            // this.props.listItem.description = newDescription;
+            // this.props.listItem.assigned_to = newAssignedTo;
+            // this.props.listItem.due_date = newDueDate;
+            // this.props.listItem.completed = newCompleted;
+            // this.props.loadList(this.props.todoList);
+            var transaction=new transaction_ItemEdit(this.props.listItem.description, this.props.listItem.assigned_to,this.props.listItem.due_date,
+                this.props.listItem.completed, newDescription,newAssignedTo,newDueDate,newCompleted,false,this.callBackForItemEdit.bind(this));
+            this.props.TPS.addTransaction(transaction);
+
         }
 
 

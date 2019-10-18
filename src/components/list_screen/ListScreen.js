@@ -31,8 +31,8 @@ export class ListScreen extends Component {
         if (e.key==='z' && e.ctrlKey){
             if (this.props.TPS.hasTransactionToUndo()){
                 this.props.TPS.undoTransaction();
-                this.props.goHome();
-                alert("Undo")
+                //this.props.goHome();
+                //alert("Undo")
                 this.props.loadList(this.props.todoList)
             }
         }
@@ -40,8 +40,8 @@ export class ListScreen extends Component {
         else if (e.key==='y'&& e.ctrlKey){
             if (this.props.TPS.hasTransactionToRedo()){
                 this.props.TPS.doTransaction();
-                this.props.goHome();
-                alert("Redo")
+                //this.props.goHome();
+                // alert("Redo")
                 this.props.loadList(this.props.todoList)
             }
         }
@@ -56,15 +56,15 @@ export class ListScreen extends Component {
                     <div id="list_details_name_container" className="text_toolbar">
                         <span id="list_name_prompt">Name:</span>
                         <input
-                            defaultValue={this.getListName()}
+                            value={this.getListName()}
                             type="text"
                             id="list_name_textfield"
-                            onChange={this.changeListName} />
+                            onChange={e=>this.changeListName(e)} />
                     </div>
                     <div id="list_details_owner_container" className="text_toolbar">
                         <span id="list_owner_prompt">Owner:</span>
                         <input
-                            defaultValue={this.getListOwner()}
+                            value={this.getListOwner()}
                             type="text"
                             id="list_owner_textfield"
                             onChange={this.changeListOwner}
@@ -104,11 +104,13 @@ export class ListScreen extends Component {
         var transaction=new transaction_ListNameChange(this.getListName(),event.target.value,this.callBackForListNameChange.bind(this));
         this.props.todoList.name = event.target.value;
         this.props.TPS.addTransaction(transaction); 
+        this.props.loadList(this.props.todoList);
     }
     changeListOwner = (event) => {
         var transaction=new transaction_ListOwnerChange(this.getListOwner(),event.target.value,this.callBackForListOwnerChange.bind(this));
         this.props.todoList.owner = event.target.value
         this.props.TPS.addTransaction(transaction)
+        this.props.loadList(this.props.todoList);
     }
     processConfirmDeleteList = () => {
         //first delete the list 

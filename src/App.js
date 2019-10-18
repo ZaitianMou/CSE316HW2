@@ -25,6 +25,7 @@ class App extends Component {
   goHome = () => {
     this.setState({currentScreen: AppScreen.HOME_SCREEN});
     this.setState({currentList: null});
+    this.state.TPS.clearAllTransactions();
   }
 
   loadList = (todoListToLoad) => {
@@ -63,6 +64,7 @@ class App extends Component {
         return <ItemScreen 
         loadList={this.loadList.bind(this)} 
         todoList={this.state.currentList} 
+        TPS={this.state.TPS}
         loadItemScreen={this.loadItemScreen.bind(this)}
         listItem={this.state.listItemForItemScreen} />;
 
